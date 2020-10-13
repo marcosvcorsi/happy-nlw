@@ -4,6 +4,8 @@ import CreateOrphanageService from '../services/CreateOrphanageService';
 import ListOrphanagesService from '../services/ListOrphangesService';
 import ShowOrphanageService from '../services/ShowOrphanageService';
 
+import orphanageView from '../views/orphanages.view';
+
 export default class OrphanagesController {
   async create(request: Request, response: Response): Promise<Response> {
     const {
@@ -41,7 +43,7 @@ export default class OrphanagesController {
 
     const orphanages = await listOrphanagesService.execute();
 
-    return response.json(orphanages);
+    return response.json(orphanageView.renderMany(orphanages));
   }
 
   async show(request: Request, response: Response): Promise<Response> {
@@ -50,6 +52,6 @@ export default class OrphanagesController {
     const showOrphanageService = new ShowOrphanageService();
     const orphanage = await showOrphanageService.execute(Number(id));
 
-    return response.json(orphanage);
+    return response.json(orphanageView.render(orphanage));
   }
 }
