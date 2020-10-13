@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { Request, Response } from 'express';
 import CreateOrphanageService from '../services/CreateOrphanageService';
 import ListOrphanagesService from '../services/ListOrphangesService';
@@ -15,6 +16,11 @@ export default class OrphanagesController {
       open_on_weekends,
     } = request.body;
 
+    const requestImages = request.files as Express.Multer.File[];
+    const images = requestImages.map((image: Express.Multer.File) => {
+      return { path: image.filename };
+    });
+
     const createOrphanageService = new CreateOrphanageService();
     const orphanage = await createOrphanageService.execute({
       name,
@@ -24,6 +30,7 @@ export default class OrphanagesController {
       instructions,
       opening_hours,
       open_on_weekends,
+      images,
     });
 
     return response.status(201).json(orphanage);

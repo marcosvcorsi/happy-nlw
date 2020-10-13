@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import Image from './Image';
 
 @Entity('orphanages')
 export default class Orphanage {
@@ -25,4 +26,9 @@ export default class Orphanage {
 
   @Column()
   open_on_weekends: boolean;
+
+  @OneToMany(() => Image, image => image.orphanage, {
+    cascade: ['insert', 'update'],
+  })
+  images: Image[];
 }
