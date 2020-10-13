@@ -5,7 +5,9 @@ export default class ListOrphanagesService {
   async execute(): Promise<Orphanage[]> {
     const orphanagesRepository = getRepository(Orphanage);
 
-    const orphanages = await orphanagesRepository.find();
+    const orphanages = await orphanagesRepository.find({
+      relations: ['images'],
+    });
 
     return orphanages;
   }

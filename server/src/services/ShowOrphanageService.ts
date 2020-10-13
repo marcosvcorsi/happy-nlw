@@ -9,6 +9,7 @@ export default class ShowOrphanageService {
       where: {
         id,
       },
+      relations: ['images'],
     });
 
     return orphanage;
