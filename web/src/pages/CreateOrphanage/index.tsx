@@ -17,7 +17,7 @@ const happyMapIcon = L.icon({
   popupAnchor: [0, -60]
 })
 
-export default function CreateOrphanage() {
+const CreateOrphanage: React.FC = () => {
   const { goBack } = useHistory();
 
   return (
@@ -103,5 +103,7 @@ export default function CreateOrphanage() {
     </div>
   );
 }
+
+export default CreateOrphanage;
 
 // return `https://a.tile.openstreetmap.org/${z}/${x}/${y}.png`;
