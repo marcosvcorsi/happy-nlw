@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FiArrowRight, FiPlus } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 
@@ -9,8 +9,27 @@ import mapMarkerImg from '../../images/map-marker.svg'
 import { mapIcon } from '../../utils/mapIcon.';
 
 import './styles.css';
+import api from '../../services/api';
+
+interface Orphanage {
+  id: number;
+  latitude: number;
+  longitude: number;
+}
 
 const OrphanagesMap: React.FC = () => {
+  const [orphanages, setOrphanages] = useState<Orphanage[]>([]);
+
+  const loadOrphanges = useCallback(async () => {
+    const {data} = await api.get('/orphanages');
+
+    setOrphanages(data);
+  }, [])
+
+  useEffect(() => {
+    loadOrphanges();
+  }, [loadOrphanges])
+
   return (
     <div id="page-map">
       <aside>
@@ -35,14 +54,16 @@ const OrphanagesMap: React.FC = () => {
         {/* <TileLayer url="https://a.tile.openstreetmap.org/{z}/{x}/{y}.png" /> */}
         <TileLayer url={`https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`}/>
       
-        <Marker position={[-26.0658396,-53.088474]} icon={mapIcon}>
-          <Popup closeButton={false} minWidth={240} maxWidth={240} className="map-popup">
-            Teste
-            <Link to="/orphanages/1">
-              <FiArrowRight size={20} color="#FFF" />
-            </Link>
-          </Popup>
-        </Marker>
+        {orphanages.map(orphanage => (
+          <Marker position={[orphanage.latitude, orphanage.longitude]} icon={mapIcon} key={orphanage.id}>
+            <Popup closeButton={false} minWidth={240} maxWidth={240} className="map-popup">
+              Teste
+              <Link to={`/orphanages/${orphanage.id}`}>
+                <FiArrowRight size={20} color="#FFF" />
+              </Link>
+            </Popup>
+          </Marker>
+        ))}
       </Map>
 
       <Link to="/orphanages/create" className="create-orphanage">
