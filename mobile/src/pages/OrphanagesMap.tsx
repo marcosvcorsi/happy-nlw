@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { StyleSheet, View, Dimensions, Text } from 'react-native';
 import MapView, {Marker, Callout, PROVIDER_GOOGLE} from 'react-native-maps';
 import {Feather} from '@expo/vector-icons';
 
 import mapMarker  from '../images/map-marker.png';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { RectButton } from 'react-native-gesture-handler';
 import api from '../services/api';
 
@@ -26,9 +26,9 @@ const OrphanagesMap: React.FC = () => {
     setOrphanages(data);
   }, [])
 
-  useEffect(() => {
+  useFocusEffect(() => {
     loadOrphanages();
-  }, [loadOrphanages])
+  })
 
   const handleNavigateToOrphanageDetails = useCallback((id: number) => {
     navigation.navigate('OrphanageDetails', { id })
